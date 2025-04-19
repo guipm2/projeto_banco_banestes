@@ -20,6 +20,7 @@
   },
   "dependencies": {
     "bootstrap": "^5.3.5",
+    "bootswatch": "^5.3.5",
     "meu-banco": "file:",
     "papaparse": "^5.5.2",
     "react": "^19.1.0",
