@@ -1,109 +1,94 @@
-import React from "react";
-import { useClientes } from "../hooks/useClientes";
-import { FilterBar } from "../components/FilterBar";
-import { Pagination } from "../components/Pagination";
-import { Link } from "react-router-dom";
+import React from 'react';
+import { useClientes } from '../hooks/useClientes';
+import { Link } from 'react-router-dom';
+import { Table, Card, Row, Col, Form, Pagination as BSPagination } from 'react-bootstrap';
+
 
 export const Home: React.FC = () => {
-  const {
-    currentClientes,
-    totalPages,
-    page,
-    setPage,
-    search,
-    setSearch,
-  } = useClientes();
+  const { currentClientes, totalPages, page, setPage, search, setSearch } = useClientes();
 
+  // Gera os itens de paginação do React‑Bootstrap
+  const pagItems = [];
+  for (let num = 1; num <= totalPages; num++) {
+    pagItems.push(
+      <BSPagination.Item
+        key={num}
+        active={num === page}
+        onClick={() => setPage(num)}
+      >
+        {num}
+      </BSPagination.Item>
+    );
+  }
+
+  
   return (
-    <div className="container mx-auto p-4 space-y-6">
-      {/* Filtro + Paginação */}
-      <div className="flex flex-col sm:flex-row sm:justify-between items-start sm:items-center gap-4">
-        <FilterBar
-          search={search}
-          onSearch={(value) => {
-            setSearch(value);
-            setPage(1);
-          }}
-        />
-        <Pagination current={page} total={totalPages} onChange={setPage} />
-      </div>
+    <>
+      <Row className="align-items-center mb-3">
+        <Col md={6} className="mb-2">
+          <Form.Control
+            type="text"
+            placeholder="Pesquisar por nome ou CPF/CNPJ"
+            value={search}
+            onChange={(e) => { setSearch(e.target.value); setPage(1); }}
+          />
+        </Col>
+        <Col md={6} className="text-md-end">
+          <BSPagination>{pagItems}</BSPagination>
+        </Col>
+      </Row>
 
-      {/* DESKTOP: Tabela dentro de box */}
-      <div className="sm:block overflow-x-auto">
-        <div
-          className="
-            p-4
-            bg-gradient-to-r from-blue-100 via-blue-200 to-blue-300
-            shadow-lg
-            rounded-[10px]
-          "
-        >
-          <table className="min-w-full divide-y divide-gray-300 bg-white rounded-[6px]">
-            <caption className="sr-only">Lista de clientes</caption>
-            <thead className="bg-gray-50">
-              <tr>
-                {["Nome", "CPF/CNPJ", "Renda Anual"].map((h) => (
-                  <th
-                    key={h}
-                    scope="col"
-                    className="px-6 py-3 text-left text-xs font-medium text-gray-600 uppercase"
-                  >
-                    {h}
-                  </th>
-                ))}
-              </tr>
-            </thead>
-            <tbody className="bg-white divide-y divide-gray-200">
-              {currentClientes.map((c) => (
-                <tr key={c.id} className="hover:bg-gray-100">
-                  <td className="px-6 py-4">
-                    <Link
-                      to={`/clientes/${c.id}`}
-                      className="text-blue-600 hover:underline"
-                    >
-                      {c.nome}
-                    </Link>
-                  </td>
-                  <td className="px-6 py-4">{c.cpfCnpj}</td>
-                  <td className="px-6 py-4 font-medium">
-                    {c.rendaAnual.toLocaleString("pt-BR", {
-                      style: "currency",
-                      currency: "BRL",
-                    })}
-                  </td>
+      {/* Desktop: tabela */}
+      <div className="d-none d-sm-block mb-4">
+        <Card className="shadow-sm rounded-3">
+          <Card.Body className="p-0">
+            <Table hover responsive className="mb-0">
+              <thead className="table-light">
+                <tr>
+                  <th>Nome</th>
+                  <th>CPF/CNPJ</th>
+                  <th>Renda Anual</th>
                 </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
+              </thead>
+              <tbody>
+                {currentClientes.map(c => (
+                  <tr key={c.id}>
+                    <td>
+                      <Link to={`/clientes/${c.id}`}>{c.nome}</Link>
+                    </td>
+                    <td>{c.cpfCnpj}</td>
+                    <td>
+                      {c.rendaAnual.toLocaleString('pt-BR',{style:'currency',currency:'BRL'})}
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </Table>
+          </Card.Body>
+        </Card>
       </div>
 
-      {/* MOBILE: Cards dentro de box */}
-      <div className="hidden sm:hidden grid gap-4">
-        {currentClientes.map((c) => (
-          <Link
-            key={c.id}
-            to={`/clientes/${c.id}`}
-            className="
-              block
-              p-4
-              bg-gradient-to-r from-purple-100 via-purple-200 to-purple-300
-              shadow-lg
-              rounded-[10px]
-              text-gray-800
-            "
-          >
-            <h3 className="text-lg font-semibold mb-1">{c.nome}</h3>
-            <p className="text-sm mb-1">{c.cpfCnpj}</p>
-            <p className="text-sm font-medium">
-              {c.rendaAnual.toLocaleString("pt-BR", {
-                style: "currency",
-                currency: "BRL",
-              })}
-            </p>
-          </Link>
-        ))}
+      {/* Mobile: cards */}
+      <div className="d-block d-sm-none">
+        <Row xs={1} className="g-3">
+          {currentClientes.map(c => (
+            <Col key={c.id}>
+              <Card className="shadow-sm rounded-3">
+                <Card.Body>
+                  <Card.Title>{c.nome}</Card.Title>
+                  <Card.Text className="mb-1">{c.cpfCnpj}</Card.Text>
+                  <Card.Text className="text-muted">
+                    {c.rendaAnual.toLocaleString('pt-BR',{style:'currency',currency:'BRL'})}
+                  </Card.Text>
+                  <Link to={`/clientes/${c.id}`}>Ver Detalhes</Link>
+                </Card.Body>
+              </Card>
+            </Col>
+          ))}
+        </Row>
       </div>
-    </div>
+    </>
   );
 };
+
+export default Home;
