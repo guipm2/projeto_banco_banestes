@@ -10,11 +10,13 @@ export const FilterBar: React.FC<FilterBarProps> = ({
   onSearch,
 }) => (
   <input
+    id="filter-input"
     type="text"
-    aria-label="Buscar clientes"
+    role="searchbox"
+    aria-label="Buscar clientes por nome ou CPF/CNPJ"
     placeholder="Nome ou CPF/CNPJ"
     value={search}
     onChange={(e) => onSearch(e.target.value)}
-    className="p-2 border rounded w-full max-w-sm"
+    className="p-2 border rounded w-full max-w-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
   />
 );
