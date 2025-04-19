@@ -29,7 +29,7 @@ export const Home: React.FC = () => {
       </div>
 
       {/* DESKTOP: Tabela dentro de box */}
-      <div className="hidden sm:block overflow-x-auto">
+      <div className="sm:block overflow-x-auto">
         <div
           className="
             p-4
@@ -79,7 +79,7 @@ export const Home: React.FC = () => {
       </div>
 
       {/* MOBILE: Cards dentro de box */}
-      <div className="sm:hidden grid gap-4">
+      <div className="hidden sm:hidden grid gap-4">
         {currentClientes.map((c) => (
           <Link
             key={c.id}

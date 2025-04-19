@@ -174,7 +174,7 @@ export const PaginaCliente: React.FC = () => {
                     key={ct.id}
                     className="hover:bg-gray-100"
                   >
-                    <td className="px-4 py-2">{ct.tipoConta}</td>
+                    <td className="px-4 py-2">{ct.tipo}</td>
                     <td className="px-4 py-2">
                       {ct.saldo.toLocaleString("pt-BR", {
                         style: "currency",
