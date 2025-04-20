@@ -57,7 +57,7 @@ const PaginaCliente: React.FC = () => {
             </Col>
             <Col className="text-end">
               <Link to="/">
-                <Button variant="secondary" size="sm">
+                <Button variant="secondary" size="sm" className="btn-back">
                   ← Voltar
                 </Button>
               </Link>

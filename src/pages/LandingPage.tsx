@@ -13,9 +13,9 @@ const LandingPage: React.FC = () => {
   return (
     <Container className="py-5">
       <h1 className="text-center mb-4">🏦 Meu Banco</h1>
-      <Row xs={1} sm={2} md={2} lg={3} className="g-2">
+      <Row xs={1} sm={2} md={2} lg={3} className="landing-row">
         {options.map((opt) => (
-          <Col key={opt.to}>
+          <Col key={opt.to} className="landing-col">
             <Card className="landing-card h-100 shadow-sm">
               <Card.Body className="d-flex flex-column">
                 <Card.Title className="text-center">{opt.title}</Card.Title>

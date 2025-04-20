@@ -1,42 +1,173 @@
-:root[data-bs-theme="light"] {
-  --bs-body-bg: #f8f9fa;
-  --bs-body-color: #212529;
-  --bs-primary: #910dfd;
-  --bs-secondary: #6c757d;
-  --bs-success: #198754;
-  --bs-info: #0dcaf0;
-  --bs-warning: #ffc107;
-  --bs-danger: #dc3545;
-  --bs-light: #f8f9fa;
-  --bs-dark: #212529;
+/* src/styles/global.css */
+
+
+:root {
+  /* Paleta principal */
+  --bs-primary: #0d2544;          /* azul escuro do header */
+  --bs-secondary: #f3f4f6;        /* cinza de fundo claro */
+  --bs-accent-light: #ff6f00;     /* laranja */
+  --bs-accent: var(--bs-accent-light); /* accent no modo claro */
+  --bs-success: #16a34a;          /* verde */
+  --bs-danger: #dc2626;           /* vermelho */
+
+  /* Fundo e texto */
+  --bs-body-bg: #ffffff;
+  --bs-body-color: #0d2544;
+
+  /* Cards */
+  --card-bg: #ffffff;
+  --card-border-color: #e5e7eb;   /* cinza suave */
 }
 
-:root[data-bs-theme="dark"] {
-  --bs-body-bg: #0c0c0c;
-  --bs-body-color: #e9ecef;
-  --bs-primary: #0d6efd;
-  --bs-secondary: #6c757d;
-  --bs-success: #198754;
-  --bs-info: #0dcaf0;
-  --bs-warning: #ffc107;
-  --bs-danger: #dc3545;
-  --bs-light: #f8f9fa;
-  --bs-dark: #212529;
+/* Dark mode */
+[data-bs-theme="dark"] {
+  --bs-body-bg: #1f2937;
+  --bs-body-color: #f3f4f6;
+  --bs-secondary: #374151;
+  --card-bg: #111827;
+  --card-border-color: #4b5563;
+
+  /* accent vira verde no dark */
+  --bs-accent: var(--bs-success);
 }
 
+/* Tipografia básica */
 body {
   background-color: var(--bs-body-bg);
-  color: var(--bs-body-color, inherit);
+  color: var(--bs-body-color);
+  font-family: 'Montserrat', sans-serif;
 }
 
+/* Navbar */
+.navbar {
+  background-color: var(--bs-primary) !important;
+}
+.navbar-brand,
+.navbar-nav .nav-link {
+  color: #fff !important;
+  transition: color 0.2s;
+}
+.navbar-nav .nav-link:hover {
+  color: var(--bs-accent) !important;
+  text-decoration: none !important;
+}
+
+/* Links padrão */
+a {
+  color: var(--bs-accent);
+  text-decoration: none;
+  transition: color 0.2s;
+}
+a:hover {
+  color: var(--bs-success);
+  text-decoration: none;
+}
+
+/* Cards */
+.card {
+  background-color: var(--card-bg);
+  border: 1px solid var(--card-border-color);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+.card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 8px 16px rgba(0,0,0,0.1);
+}
+
+/* Botões primários (accent no claro, success no dark) */
+.btn-primary {
+  background-color: var(--bs-accent);
+  border-color: var(--bs-accent);
+  color: #fff;
+  border-radius: 0.5rem;
+  transition: background-color 0.2s, box-shadow 0.2s;
+}
+/* Hover no modo claro: verde sucesso */
+:not([data-bs-theme="dark"]) .btn-primary:hover {
+  background-color: var(--bs-success);
+  border-color: var(--bs-success);
+}
+/* Hover no modo escuro: laranja */
+[data-bs-theme="dark"] .btn-primary:hover {
+  background-color: var(--bs-accent-light);
+  border-color: var(--bs-accent-light);
+}
+
+/* Botões “Voltar” seguindo o mesmo esquema, mas sólidos */
+.btn-back {
+  /* claro: laranja fundo, texto branco */
+  background-color: var(--bs-accent-light);
+  border-color: var(--bs-accent-light);
+  color: #fff;
+  border-radius: 0.5rem;
+  transition: background-color 0.2s;
+}
+/* Hover no modo claro: troca para verde */
+:not([data-bs-theme="dark"]) .btn-back:hover {
+  background-color: var(--bs-success);
+  border-color: var(--bs-success);
+}
+/* Dark: botão inicia verde */
+[data-bs-theme="dark"] .btn-back {
+  background-color: var(--bs-success);
+  border-color: var(--bs-success);
+  color: #fff;
+}
+/* Hover no modo escuro: troca para laranja */
+[data-bs-theme="dark"] .btn-back:hover {
+  background-color: var(--bs-accent-light);
+  border-color: var(--bs-accent-light);
+}
+
+/* Botões secundários */
+.btn-secondary {
+  background-color: var(--bs-secondary);
+  border-color: var(--bs-secondary);
+  color: var(--bs-body-color);
+}
+.btn-secondary:hover {
+  background-color: #e2e2e2;
+  border-color: #e2e2e2;
+}
+
+/* Hover em linhas da lista de clientes: apenas o nome em negrito/colorido */
+.table-hover tbody tr:hover td:first-child {
+  font-weight: 600;
+}
+[data-bs-theme="dark"] .table-hover tbody tr:hover td:first-child a {
+  color: var(--bs-accent-light);
+}
+
+/* Formulários */
+.form-control {
+  border-radius: 0.5rem;
+  border-color: var(--card-border-color);
+}
+.form-control:focus {
+  border-color: var(--bs-accent);
+  box-shadow: 0 0 0 0.2rem rgba(255,111,0,0.25);
+}
+
+/* LandingPage */
+.landing-row {
+  margin-left: -0.75rem;
+  margin-right: -0.75rem;
+}
+.landing-col {
+  padding-left: 0.75rem;
+  padding-right: 0.75rem;
+  margin-bottom: 1rem;
+}
 .landing-card {
-  min-height: 8rem;
+  min-height: 200px;
   display: flex;
   flex-direction: column;
-  max-width: 13rem;
+  max-width: 20rem;
   margin-left: auto;
   margin-right: auto;
   padding: 1rem;
 }
 
-
+/* Espaçamentos rápidos */
+.mb-4 { margin-bottom: 1.5rem !important; }
+.py-5 { padding-top: 3rem !important; padding-bottom: 3rem !important; }
