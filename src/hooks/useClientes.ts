@@ -1,32 +1,33 @@
+// src/hooks/useClientes.ts
 import { useState, useEffect, useMemo } from "react";
 import { Cliente } from "../types";
 import { getClientes } from "../services/api";
 
-
+export type ClienteSortKey = "nome" | "rendaAnual";
 
 /**
- * Hook para gerenciar a lista de clientes, pesquisa e paginação.
- * @returns objeto com lista atual, total de páginas, página atual e funções de controle
+ * Hook para gerenciar clientes com:
+ * - pesquisa
+ * - paginação
+ * - ordenação por nome ou rendaAnual (com NaN ao fim)
  */
 export function useClientes() {
-  const [allClientes, setAllClientes] = useState<Cliente[]>([]);   // estado para armazenar a lista de clientes
-  const [search, setSearch] = useState(""); // termo de pesquisa (nome ou CPF/CNPJ)
-  const [page, setPage] = useState(1); // número da página atual
+  const [allClientes, setAllClientes] = useState<Cliente[]>([]);
+  const [search, setSearch] = useState("");
+  const [page, setPage] = useState(1);
   const itemsPerPage = 10;
 
-  // carrega os dados de clientes inicialmente
+  // ordenação
+  const [sortKey, setSortKey] = useState<ClienteSortKey>("nome");
+  const [sortDir, setSortDir] = useState<"asc" | "desc">("asc");
+
   useEffect(() => {
     getClientes()
-      .then(data => {
-        console.log("Clientes carregados:", data);
-        setAllClientes(data);
-      })
-      .catch(err => console.error(err));
+      .then((data) => setAllClientes(data))
+      .catch((err) => console.error("Erro ao buscar clientes:", err));
   }, []);
-  
 
-  // compara o nome em minúsculas para evitar problemas de case-sensitive
-  // e verifica se o CPF/CNPJ contém o termo de pesquisa
+  // filtra por nome/CPF
   const filtered = useMemo(
     () =>
       allClientes.filter(
@@ -37,19 +38,29 @@ export function useClientes() {
     [allClientes, search]
   );
 
-  // calcula quantas páginas são necessárias com base no
-  // número total de clientes filtrados e no número de itens por página
-  const totalPages = Math.ceil(filtered.length / itemsPerPage);
-  
-  
-  /*
-   * Gera o array de clientes para exibir na página atual,
-   * cortando o array filtrado de acordo com page e itemsPerPage.
-   */
+  // ordena, colocando NaN de rendaAnual sempre ao fim
+  const sorted = useMemo(() => {
+    return [...filtered].sort((a, b) => {
+      if (sortKey === "rendaAnual") {
+        const aNaN = Number.isNaN(a.rendaAnual);
+        const bNaN = Number.isNaN(b.rendaAnual);
+        if (aNaN && !bNaN) return 1;
+        if (!aNaN && bNaN) return -1;
+      }
+      const av = a[sortKey];
+      const bv = b[sortKey];
+      if (av < bv) return sortDir === "asc" ? -1 : 1;
+      if (av > bv) return sortDir === "asc" ? 1 : -1;
+      return 0;
+    });
+  }, [filtered, sortKey, sortDir]);
+
+  // paginação
+  const totalPages = Math.ceil(sorted.length / itemsPerPage);
   const currentClientes = useMemo(
     () =>
-      filtered.slice((page - 1) * itemsPerPage, page * itemsPerPage),
-    [filtered, page]
+      sorted.slice((page - 1) * itemsPerPage, page * itemsPerPage),
+    [sorted, page]
   );
 
   return {
@@ -59,5 +70,9 @@ export function useClientes() {
     setPage,
     search,
     setSearch,
+    sortKey,
+    sortDir,
+    setSortKey,
+    setSortDir,
   };
 }

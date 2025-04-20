@@ -1,12 +1,14 @@
 // src/App.tsx
 import React, { useState, useEffect } from 'react';
 import { Routes, Route, Link } from 'react-router-dom';
-import Home from './pages/Home';
+import LandingPage from './pages/LandingPage';
+import ClientesPage from './pages/ClientesPage';
 import PaginaCliente from './pages/PaginaCliente';
+import AgenciasPage from './pages/AgenciasPage';
 import { Navbar, Container, Form } from 'react-bootstrap';
 
 export default function App() {
-  // 1) busca preferência
+  // Tema claro/escuro
   const getInitialTheme = (): 'light' | 'dark' => {
     const stored = localStorage.getItem('theme');
     if (stored === 'light' || stored === 'dark') return stored;
@@ -16,7 +18,6 @@ export default function App() {
   };
   const [theme, setTheme] = useState<'light' | 'dark'>(getInitialTheme);
 
-  // 2) aplica o theme no <html>
   useEffect(() => {
     localStorage.setItem('theme', theme);
     document.documentElement.setAttribute('data-bs-theme', theme);
@@ -43,8 +44,10 @@ export default function App() {
 
       <Container>
         <Routes>
-          <Route path="/" element={<Home />} />
-          <Route path="clientes/:id" element={<PaginaCliente />} />
+          <Route path="/" element={<LandingPage />} />
+          <Route path="/clientes" element={<ClientesPage />} />
+          <Route path="/clientes/:id" element={<PaginaCliente />} />
+          <Route path="/agencias" element={<AgenciasPage />} />
         </Routes>
       </Container>
     </>
