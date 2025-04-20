@@ -1,6 +1,6 @@
 // src/pages/LandingPage.tsx
 import React from 'react';
-import { Container, Row, Col, Card, Button } from 'react-bootstrap';
+import { Container, Row, Col, Card } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
 
 const LandingPage: React.FC = () => {
