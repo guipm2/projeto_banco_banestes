@@ -1,14 +1,14 @@
 /* src/styles/global.css */
 
-
+/* Paleta de cores e variáveis */
 :root {
   /* Paleta principal */
-  --bs-primary: #0d2544;          /* azul escuro do header */
-  --bs-secondary: #f3f4f6;        /* cinza de fundo claro */
-  --bs-accent-light: #ff6f00;     /* laranja */
-  --bs-accent: var(--bs-accent-light); /* accent no modo claro */
-  --bs-success: #16a34a;          /* verde */
-  --bs-danger: #dc2626;           /* vermelho */
+  --bs-primary: #0d2544;
+  --bs-secondary: #f3f4f6;
+  --bs-accent-light: #ff6f00;
+  --bs-accent: var(--bs-accent-light);
+  --bs-success: #16a34a;
+  --bs-danger: #dc2626;
 
   /* Fundo e texto */
   --bs-body-bg: #ffffff;
@@ -16,7 +16,7 @@
 
   /* Cards */
   --card-bg: #ffffff;
-  --card-border-color: #e5e7eb;   /* cinza suave */
+  --card-border-color: #eeeeee;
 }
 
 /* Dark mode */
@@ -24,8 +24,8 @@
   --bs-body-bg: #1f2937;
   --bs-body-color: #f3f4f6;
   --bs-secondary: #374151;
-  --card-bg: #111827;
-  --card-border-color: #4b5563;
+  --card-bg: #19212c;
+  --card-border-color: #19212c;
 
   /* accent vira verde no dark */
   --bs-accent: var(--bs-success);
@@ -38,7 +38,7 @@ body {
   font-family: 'Montserrat', sans-serif;
 }
 
-/* Navbar */
+/* Navbar - modo claro */
 .navbar {
   background-color: var(--bs-primary) !important;
 }
@@ -50,6 +50,18 @@ body {
 .navbar-nav .nav-link:hover {
   color: var(--bs-accent) !important;
   text-decoration: none !important;
+}
+
+/* Navbar - modo escuro */
+[data-bs-theme="dark"] .navbar {
+  background-color: #ffffff !important;
+}
+[data-bs-theme="dark"] .navbar-brand,
+[data-bs-theme="dark"] .navbar-nav .nav-link {
+  color: #0d2544 !important;
+}
+[data-bs-theme="dark"] .navbar-nav .nav-link:hover {
+  color: var(--bs-accent-light) !important;
 }
 
 /* Links padrão */
@@ -70,11 +82,11 @@ a:hover {
   transition: transform 0.2s ease, box-shadow 0.2s ease;
 }
 .card:hover {
-  transform: translateY(-4px);
-  box-shadow: 0 8px 16px rgba(0,0,0,0.1);
+  transform: translateY(-3px);
+  box-shadow: 0 8px 16px rgba(0,0,0,0.5);
 }
 
-/* Botões primários (accent no claro, success no dark) */
+/* Botões primários */
 .btn-primary {
   background-color: var(--bs-accent);
   border-color: var(--bs-accent);
@@ -82,41 +94,35 @@ a:hover {
   border-radius: 0.5rem;
   transition: background-color 0.2s, box-shadow 0.2s;
 }
-/* Hover no modo claro: verde sucesso */
 :not([data-bs-theme="dark"]) .btn-primary:hover {
   background-color: var(--bs-success);
   border-color: var(--bs-success);
 }
-/* Hover no modo escuro: laranja */
 [data-bs-theme="dark"] .btn-primary:hover {
   background-color: var(--bs-accent-light);
   border-color: var(--bs-accent-light);
 }
 
-/* Botões “Voltar” seguindo o mesmo esquema, mas sólidos */
+/* Botões “Voltar” */
 .btn-back {
-  /* claro: laranja fundo, texto branco */
   background-color: var(--bs-accent-light);
   border-color: var(--bs-accent-light);
   color: #fff;
   border-radius: 0.5rem;
   transition: background-color 0.2s;
 }
-/* Hover no modo claro: troca para verde */
 :not([data-bs-theme="dark"]) .btn-back:hover {
-  background-color: var(--bs-success);
-  border-color: var(--bs-success);
-}
-/* Dark: botão inicia verde */
-[data-bs-theme="dark"] .btn-back {
-  background-color: var(--bs-success);
-  border-color: var(--bs-success);
-  color: #fff;
-}
-/* Hover no modo escuro: troca para laranja */
-[data-bs-theme="dark"] .btn-back:hover {
   background-color: var(--bs-accent-light);
   border-color: var(--bs-accent-light);
+}
+[data-bs-theme="dark"] .btn-back {
+  background-color: var(--bs-secondary);
+  border-color: var(--bs-secondary);
+  color: #fff;
+}
+[data-bs-theme="dark"] .btn-back:hover {
+  background-color: var(--bs-success);
+  border-color: var(--bs-success);
 }
 
 /* Botões secundários */
@@ -130,12 +136,32 @@ a:hover {
   border-color: #e2e2e2;
 }
 
-/* Hover em linhas da lista de clientes: apenas o nome em negrito/colorido */
-.table-hover tbody tr:hover td:first-child {
-  font-weight: 600;
+/* Lista de clientes: cores de texto padrão */
+.table-hover tbody td,
+.table-hover tbody td a {
+  color: var(--bs-body-color) !important;
 }
-[data-bs-theme="dark"] .table-hover tbody tr:hover td:first-child a {
-  color: var(--bs-accent-light);
+[data-bs-theme="dark"] .table-hover tbody td,
+[data-bs-theme="dark"] .table-hover tbody td a {
+  color: #fff !important;
+}
+
+/* Hover na linha inteira: negrito + cor */
+.table-hover tbody tr:hover td {
+  text-shadow:
+    0 0 1px currentColor,
+    0 0 1px currentColor;
+}
+:not([data-bs-theme="dark"]) .table-hover tbody tr:hover td {
+  color: var(--bs-accent-light) !important;
+}
+[data-bs-theme="dark"] .table-hover tbody tr:hover td {
+  color: var(--bs-success) !important;
+}
+
+/* Remove sublinhado em links da tabela */
+.table-hover tbody td a {
+  text-decoration: none;
 }
 
 /* Formulários */
@@ -145,7 +171,7 @@ a:hover {
 }
 .form-control:focus {
   border-color: var(--bs-accent);
-  box-shadow: 0 0 0 0.2rem rgba(255,111,0,0.25);
+  box-shadow: 0 0 0 0.1rem rgba(0, 0, 0, 0.01);
 }
 
 /* LandingPage */
@@ -159,15 +185,61 @@ a:hover {
   margin-bottom: 1rem;
 }
 .landing-card {
-  min-height: 200px;
-  display: flex;
-  flex-direction: column;
-  max-width: 20rem;
-  margin-left: auto;
-  margin-right: auto;
-  padding: 1rem;
+  transition: background-color 0.2s, color 0.2s;
+}
+.landing-card:hover {
+  background-color: var(--bs-accent);
+  color: #fff;
+}
+.landing-card:hover .card-title {
+  color: #fff;
+}
+
+/* Ícones da LandingPage */
+.landing-icon {
+  width: 3rem;
+  height: 3rem;
+  background-color: var(--bs-body-color);
+  transition: background-color 0.2s;
+}
+.landing-card:hover .landing-icon {
+  background-color: #fff;
+}
+[data-bs-theme="dark"] .landing-icon {
+  background-color: #fff;
 }
 
 /* Espaçamentos rápidos */
 .mb-4 { margin-bottom: 1.5rem !important; }
 .py-5 { padding-top: 3rem !important; padding-bottom: 3rem !important; }
+
+/* Título centralizado */
+.title-center {
+  margin-bottom: 3rem;
+  text-align: center !important;
+  font-weight: bold;
+}
+
+/* Textos centrais */
+.text-center {
+  text-align: center !important;
+  font-weight: bold;
+  font-size: 1.5rem;
+}
+
+
+/* Ajusta cores e cantos dos botões */
+.pagination .page-item .page-link {
+  color: var(--bs-body-color) !important;       /* azul no claro, branco no dark */
+  border-color: var(--bs-accent) !important;    /* laranja no claro, verde no dark */
+  border-radius: 0.5rem;
+  transition: background-color 0.2s, color 0.2s;
+}
+
+/* Botão ativo e hover */
+.pagination .page-item.active .page-link,
+.pagination .page-link:hover {
+  background-color: var(--bs-accent) !important; /* laranja no claro, verde no dark */
+  border-color: var(--bs-accent) !important;
+  color: #fff !important;
+}
