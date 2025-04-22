@@ -1,7 +1,7 @@
 // src/pages/ClientesPage.tsx
-import React, { useEffect, useState } from 'react';
-import { useClientes, ClienteSortKey } from '../hooks/useClientes';
-import { useNavigate, Link } from 'react-router-dom';
+import React, { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { useClientes, ClienteSortKey } from "../hooks/useClientes";
 import {
   Table,
   Card,
@@ -9,9 +9,9 @@ import {
   Col,
   Form,
   Pagination as BSPagination,
-} from 'react-bootstrap';
-import { formatarCPF } from '../utils/FormatarCPF';
-import { getContas } from '../services/api';
+} from "react-bootstrap";
+import { formatarCPF } from "../utils/FormatarCPF";
+import { getContas } from "../services/api";
 
 const ClientesPage: React.FC = () => {
   const navigate = useNavigate();
@@ -28,12 +28,12 @@ const ClientesPage: React.FC = () => {
     setSortDir,
   } = useClientes();
 
-  // mapa de cpfCnpjCliente → primeira conta.id
+  // Mapa de cpfCnpjCliente → primeiro id de Conta
   const [contaMapa, setContaMapa] = useState<Record<string, string>>({});
   useEffect(() => {
-    getContas().then(contas => {
+    getContas().then((contas) => {
       const mapa: Record<string, string> = {};
-      contas.forEach(ct => {
+      contas.forEach((ct) => {
         if (!mapa[ct.cpfCnpjCliente]) {
           mapa[ct.cpfCnpjCliente] = ct.id;
         }
@@ -42,47 +42,61 @@ const ClientesPage: React.FC = () => {
     });
   }, []);
 
-  const pagItems = [];
-  for (let num = 1; num <= totalPages; num++) {
-    pagItems.push(
-      <BSPagination.Item
-        key={num}
-        active={num === page}
-        onClick={() => setPage(num)}
-      >
-        {num}
-      </BSPagination.Item>
-    );
-  }
+  // Itens de paginação
+  const pagItems = Array.from({ length: totalPages }, (_, i) => (
+    <BSPagination.Item
+      key={i + 1}
+      active={i + 1 === page}
+      onClick={() => setPage(i + 1)}
+    >
+      {i + 1}
+    </BSPagination.Item>
+  ));
 
   const handleSort = (key: ClienteSortKey) => {
     if (sortKey === key) {
-      setSortDir(sortDir === 'asc' ? 'desc' : 'asc');
+      setSortDir(sortDir === "asc" ? "desc" : "asc");
     } else {
       setSortKey(key);
-      setSortDir('asc');
+      setSortDir("asc");
     }
   };
 
   const renderArrow = (key: ClienteSortKey) =>
-    sortKey === key ? (sortDir === 'asc' ? ' ▲' : ' ▼') : null;
+    sortKey === key ? (sortDir === "asc" ? " ▲" : " ▼") : null;
 
   return (
     <>
       <Row className="align-items-center mb-3">
+        {/* Campo de pesquisa */}
         <Col md={6} className="mb-2">
           <Form.Control
             type="text"
             placeholder="Pesquisar por nome ou CPF/CNPJ"
             value={search}
-            onChange={e => {
+            onChange={(e) => {
               setSearch(e.target.value);
               setPage(1);
             }}
           />
         </Col>
+        {/* Paginação + seletor de ordem alfabética no mobile */}
         <Col md={6} className="text-md-end">
-          <BSPagination>{pagItems}</BSPagination>
+          <div className="d-flex justify-content-end align-items-center">
+            <Form.Select
+              className="d-inline-block d-sm-none me-2"
+              style={{ width: "auto" }}
+              value={sortDir}
+              onChange={(e) => {
+                setSortKey("nome");
+                setSortDir(e.target.value as "asc" | "desc");
+              }}
+            >
+              <option value="asc">A‑Z</option>
+              <option value="desc">Z‑A</option>
+            </Form.Select>
+            <BSPagination className="mb-0">{pagItems}</BSPagination>
+          </div>
         </Col>
       </Row>
 
@@ -94,25 +108,25 @@ const ClientesPage: React.FC = () => {
               <thead className="table-light">
                 <tr>
                   <th
-                    style={{ cursor: 'pointer' }}
-                    onClick={() => handleSort('nome')}
+                    style={{ cursor: "pointer" }}
+                    onClick={() => handleSort("nome")}
                   >
-                    Nome{renderArrow('nome')}
+                    Nome{renderArrow("nome")}
                   </th>
                   <th>Conta | Agência</th>
                   <th>CPF/CNPJ</th>
                 </tr>
               </thead>
               <tbody>
-                {currentClientes.map(c => (
+                {currentClientes.map((c) => (
                   <tr
                     key={c.id}
                     onClick={() => navigate(`/clientes/${c.id}`)}
-                    style={{ cursor: 'pointer' }}
+                    style={{ cursor: "pointer" }}
                   >
                     <td>{c.nome}</td>
                     <td>
-                      Conta: {contaMapa[c.cpfCnpj] ?? '-'} | Agência:{' '}
+                      Conta: {contaMapa[c.cpfCnpj] ?? "-"} | Agência:{" "}
                       {c.codigoAgencia}
                     </td>
                     <td>{formatarCPF(c.cpfCnpj)}</td>
@@ -127,28 +141,22 @@ const ClientesPage: React.FC = () => {
       {/* Mobile: cards */}
       <div className="d-block d-sm-none">
         <Row xs={1} className="g-3">
-          {currentClientes.map(c => (
+          {currentClientes.map((c) => (
             <Col key={c.id}>
-              <Link
-                to={`/clientes/${c.id}`}
-                className="text-decoration-none"
+              <Card
+                className="shadow-sm rounded-3"
+                onClick={() => navigate(`/clientes/${c.id}`)}
+                style={{ cursor: "pointer" }}
               >
-                <Card className="shadow-sm rounded-3">
-                  <Card.Body>
-                    <Card.Title>
-                      {c.nome}
-                      {renderArrow('nome')}
-                    </Card.Title>
-                    <Card.Text className="mb-1">
-                      Conta: {contaMapa[c.cpfCnpj] ?? '-'} | Agência:{' '}
-                      {c.codigoAgencia}
-                    </Card.Text>
-                    <Card.Text className="mb-1">
-                      {formatarCPF(c.cpfCnpj)}
-                    </Card.Text>
-                  </Card.Body>
-                </Card>
-              </Link>
+                <Card.Body>
+                  <Card.Title>{c.nome}</Card.Title>
+                  <Card.Text className="mb-1">
+                    Conta: {contaMapa[c.cpfCnpj] ?? "-"} | Agência:{" "}
+                    {c.codigoAgencia}
+                  </Card.Text>
+                  <Card.Text>{formatarCPF(c.cpfCnpj)}</Card.Text>
+                </Card.Body>
+              </Card>
             </Col>
           ))}
         </Row>

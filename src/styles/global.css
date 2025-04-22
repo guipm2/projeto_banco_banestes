@@ -149,8 +149,8 @@ a:hover {
 /* Hover na linha inteira: negrito + cor */
 .table-hover tbody tr:hover td {
   text-shadow:
-    0 0 1px currentColor,
-    0 0 1px currentColor;
+    0 0 0.75px currentColor,
+    0 0 0.75px currentColor;
 }
 :not([data-bs-theme="dark"]) .table-hover tbody tr:hover td {
   color: var(--bs-accent-light) !important;
