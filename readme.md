@@ -62,3 +62,9 @@ Uma aplicação web responsiva para gerenciar e visualizar dados de clientes, co
   - Fetch API + PapaParse (CSV → JSON)  
 - **Deploy:**  
   - Vercel (deploy automático via GitHub)
+
+---
+
+## 🌐 Acesso online
+
+- projeto-banco-banestes.vercel.app
